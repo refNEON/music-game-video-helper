@@ -1,5 +1,6 @@
 # music-game-video-helper
 A application helps to enhance your music game video
+
 当前项目仍处于早期开发阶段，功能和使用方式可能会持续调整。
 
 ---
