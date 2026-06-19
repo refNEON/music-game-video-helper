@@ -1380,7 +1380,9 @@
     /* =========================
        API 配置
     ========================= */
-    const API_BASE_URL = "http://localhost:5000";
+    // 部署在阿里云服务器上时，前后端同源，使用相对路径
+    // 本地开发时可改为 "http://localhost:5000"
+    const API_BASE_URL = "";
     let currentTaskTimer = null;
     let isSubmitting = false;
 
