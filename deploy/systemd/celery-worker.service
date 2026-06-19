@@ -1,13 +1,13 @@
 [Unit]
 Description=Music Game Video Helper Celery Worker
-After=network.target redis-server.service
+After=network.target redis.service
 
 [Service]
 Type=simple
 User=root
 WorkingDirectory=/opt/music-game-video-helper/backend
-Environment="PATH=/opt/music-game-video-helper/backend/venv/bin"
-ExecStart=/opt/music-game-video-helper/backend/venv/bin/celery -A task worker --loglevel=info
+Environment="PATH=/opt/miniconda3/envs/music_video_helper/bin"
+ExecStart=/opt/miniconda3/envs/music_video_helper/bin/celery -A task worker --loglevel=info
 Restart=always
 RestartSec=5
 
