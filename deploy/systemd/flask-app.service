@@ -6,8 +6,8 @@ After=network.target redis.service
 Type=simple
 User=root
 WorkingDirectory=/opt/music-game-video-helper/backend
-Environment="PATH=/opt/miniconda3/envs/music_video_helper/bin"
-ExecStart=/opt/miniconda3/envs/music_video_helper/bin/gunicorn -w 2 -b 127.0.0.1:5000 app:app
+Environment="PATH=/opt/miniconda3/bin:/usr/bin:/usr/local/bin"
+ExecStart=/opt/miniconda3/bin/gunicorn -w 2 -b 127.0.0.1:5000 app:app
 Restart=always
 RestartSec=5
 

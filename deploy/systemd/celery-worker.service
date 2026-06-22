@@ -6,8 +6,8 @@ After=network.target redis.service
 Type=simple
 User=root
 WorkingDirectory=/opt/music-game-video-helper/backend
-Environment="PATH=/opt/miniconda3/envs/music_video_helper/bin"
-ExecStart=/opt/miniconda3/envs/music_video_helper/bin/celery -A task worker --loglevel=info
+Environment="PATH=/opt/miniconda3/bin:/usr/bin:/usr/local/bin"
+ExecStart=/opt/miniconda3/bin/celery -A task worker --loglevel=info
 Restart=always
 RestartSec=5
 

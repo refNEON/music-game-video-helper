@@ -67,10 +67,11 @@ git clone https://github.com/refNEON/music-game-video-helper.git
 
 ```bash
 cd /opt/music-game-video-helper/backend
-source /opt/miniconda3/bin/activate music_video_helper
-pip install -r requirements.txt
+/opt/miniconda3/bin/pip install -r requirements.txt
 mkdir -p uploads results temp reference_audio
 ```
+
+> 注意：当前 systemd 服务文件直接使用 Miniconda 的 base 环境，并将 `/usr/bin` 加入 PATH，以便 Celery 能找到系统安装的 `ffmpeg`/`ffprobe`。
 
 ## 8. 启动后端服务
 

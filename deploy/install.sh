@@ -60,13 +60,8 @@ if [ ! -d "$CONDA_DIR" ]; then
     rm -f /tmp/miniconda.sh
 fi
 
-# 初始化 conda
+# 初始化 conda base 环境
 source "$CONDA_DIR/bin/activate"
-
-echo "==> 创建 Python 3.9 环境"
-if ! conda env list | grep -q "^$ENV_NAME "; then
-    conda create -n "$ENV_NAME" python=3.9 -y
-fi
 
 echo "==> 克隆项目"
 if [ -d "$PROJECT_DIR" ]; then
@@ -77,9 +72,8 @@ fi
 
 cd "$PROJECT_DIR/backend"
 
-echo "==> 安装 Python 依赖"
-conda activate "$ENV_NAME"
-pip install -r requirements.txt
+echo "==> 安装 Python 依赖（使用 Miniconda base 环境）"
+"$CONDA_DIR/bin/pip" install -r requirements.txt
 # 如果你的 Redis 服务器版本较旧（< 6.0），取消下面这行注释
 # pip install redis==4.6.0
 

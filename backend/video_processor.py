@@ -1,6 +1,31 @@
 import os
 import json
+import glob
+import shutil
 import ffmpeg
+
+
+def _ensure_ffmpeg_in_path():
+    if shutil.which("ffmpeg"):
+        return
+    search_dirs = []
+    winget_base = os.path.join(os.environ.get("LOCALAPPDATA", ""), "Microsoft", "WinGet", "Packages")
+    if os.path.isdir(winget_base):
+        for d in glob.glob(os.path.join(winget_base, "Gyan.FFmpeg_*", "ffmpeg-*", "bin")):
+            search_dirs.append(d)
+    for drive in ["C:", "D:", "E:"]:
+        for p in [
+            os.path.join(drive, os.sep, "ffmpeg", "bin"),
+            os.path.join(drive, os.sep, "Program Files", "ffmpeg", "bin"),
+        ]:
+            search_dirs.append(p)
+    for d in search_dirs:
+        if os.path.isfile(os.path.join(d, "ffmpeg.exe")):
+            os.environ["PATH"] = d + os.pathsep + os.environ.get("PATH", "")
+            return
+
+
+_ensure_ffmpeg_in_path()
 
 def _ensure_parent_dir(file_path: str):
     """

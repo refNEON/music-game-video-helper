@@ -6,6 +6,7 @@ celery = Celery(
     "video_processor",
     broker=Config.CELERY_BROKER_URL,
     backend=Config.CELERY_RESULT_BACKEND,
+    include=["task"],
 )
 
 celery.conf.update(
@@ -17,4 +18,6 @@ celery.conf.update(
     task_track_started=True,
     worker_prefetch_multiplier=1,
     task_acks_late=True,
+    broker_transport_options={"connection_kwargs": {"protocol": 2}},
+    result_backend_transport_options={"connection_kwargs": {"protocol": 2}},
 )

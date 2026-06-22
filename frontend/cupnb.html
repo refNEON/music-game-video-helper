@@ -1220,6 +1220,13 @@
             <input class="input" id="gameName" type="text" placeholder="例如：Arcaea / Phigros / maimai" />
           </div>
 
+          <label style="display:block;margin-top:12px;font-size:13px;color:var(--muted);">备注</label>
+          <textarea id="remark" rows="2" placeholder="可选，例如：视频开头有黑屏..." style="width:100%;margin-top:4px;padding:10px 14px;background:var(--glass);border:1px solid var(--line);border-radius:14px;color:var(--text);font-size:14px;resize:vertical;font-family:inherit;"></textarea>
+
+        <div style="width:100%;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin:16px 0 4px;">
+          <div id="progressBar" style="width:0%;height:100%;background:linear-gradient(90deg,var(--primary2),var(--primary));border-radius:3px;transition:width 0.4s ease;"></div>
+        </div>
+
         <div class="action-row">
           <button class="btn btn-primary" id="submitBtn">提交任务</button>
           <button class="btn btn-ghost" id="fillDemoBtn">填充示例</button>
@@ -1380,8 +1387,6 @@
     /* =========================
        API 配置
     ========================= */
-    // 部署在阿里云服务器上时，前后端同源，使用相对路径
-    // 本地开发时可改为 "http://localhost:5000"
     const API_BASE_URL = "";
     let currentTaskTimer = null;
     let isSubmitting = false;
