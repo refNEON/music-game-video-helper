@@ -1401,31 +1401,36 @@
     // 使用 CDN 加载 ffmpeg.wasm（@0.12.x UMD 版本）
     const FFMPEG_CORE_URL = "/static/ffmpeg/ffmpeg-core.js";
     async function loadFFmpeg() {
-      if (ffmpegLoaded) return;
-      if (ffmpegLoading) {
-        // 等待其他地方触发的加载完成
-        while (ffmpegLoading) await new Promise(r => setTimeout(r, 200));
-        return;
-      }
-      ffmpegLoading = true;
-      showToast("正在加载音视频处理引擎...");
-      try {
-        const { FFmpeg } = await import("https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js");
-        ffmpegInstance = new FFmpeg();
-        await ffmpegInstance.load({
-          coreURL: FFMPEG_CORE_URL,
-          wasmURL: "/static/ffmpeg/ffmpeg-core.wasm",
-        });
-        ffmpegLoaded = true;
-        showToast("处理引擎加载完成");
-      } catch (e) {
-        console.error("ffmpeg.wasm 加载失败:", e);
-        showToast("处理引擎加载失败，请刷新重试");
-        throw e;
-      } finally {
-        ffmpegLoading = false;
-      }
-    }
+  if (ffmpegLoaded) return;
+  if (ffmpegLoading) {
+    // 等待其他地方触发的加载完成
+    while (ffmpegLoading) await new Promise(r => setTimeout(r, 200));
+    return;
+  }
+  ffmpegLoading = true;
+  showToast("正在加载音视频处理引擎...");
+  try {
+    // 1. 替换远程unpkg import为本地静态index.js
+    const baseUrl = "/static/ffmpeg";
+    const { FFmpeg } = await import(`${baseUrl}/index.js`);
+    
+    ffmpegInstance = new FFmpeg();
+    await ffmpegInstance.load({
+      coreURL: FFMPEG_CORE_URL,
+      wasmURL: `${baseUrl}/ffmpeg-core.wasm`,
+      // 2. 必须加上本地workerURL，不然内部自动请求unpkg的worker
+      workerURL: `${baseUrl}/worker.js`
+    });
+    ffmpegLoaded = true;
+    showToast("处理引擎加载完成");
+  } catch (e) {
+    console.error("ffmpeg.wasm 加载失败:", e);
+    showToast("处理引擎加载失败，请刷新重试");
+    throw e;
+  } finally {
+    ffmpegLoading = false;
+  }
+}
 
     /**
      * 用 ffmpeg.wasm 从本地视频提取音频（WAV 格式）
