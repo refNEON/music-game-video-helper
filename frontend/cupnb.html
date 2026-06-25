@@ -1399,8 +1399,7 @@
     let ffmpegLoading = false;
 
     // 使用 CDN 加载 ffmpeg.wasm（@0.12.x UMD 版本）
-    const FFMPEG_CORE_URL = "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js";
-
+    const FFMPEG_CORE_URL = "/static/ffmpeg/ffmpeg-core.js";
     async function loadFFmpeg() {
       if (ffmpegLoaded) return;
       if (ffmpegLoading) {
@@ -1415,7 +1414,7 @@
         ffmpegInstance = new FFmpeg();
         await ffmpegInstance.load({
           coreURL: FFMPEG_CORE_URL,
-          wasmURL: "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm",
+          wasmURL: "/static/ffmpeg/ffmpeg-core.wasm",
         });
         ffmpegLoaded = true;
         showToast("处理引擎加载完成");
