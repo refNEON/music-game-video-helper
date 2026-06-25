@@ -1392,6 +1392,119 @@
     let isSubmitting = false;
 
     /* =========================
+       ffmpeg.wasm 加载
+    ========================= */
+    let ffmpegInstance = null;
+    let ffmpegLoaded = false;
+    let ffmpegLoading = false;
+
+    // 使用 CDN 加载 ffmpeg.wasm（@0.12.x UMD 版本）
+    const FFMPEG_CORE_URL = "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js";
+
+    async function loadFFmpeg() {
+      if (ffmpegLoaded) return;
+      if (ffmpegLoading) {
+        // 等待其他地方触发的加载完成
+        while (ffmpegLoading) await new Promise(r => setTimeout(r, 200));
+        return;
+      }
+      ffmpegLoading = true;
+      showToast("正在加载音视频处理引擎...");
+      try {
+        const { FFmpeg } = await import("https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js");
+        ffmpegInstance = new FFmpeg();
+        await ffmpegInstance.load({
+          coreURL: FFMPEG_CORE_URL,
+          wasmURL: "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm",
+        });
+        ffmpegLoaded = true;
+        showToast("处理引擎加载完成");
+      } catch (e) {
+        console.error("ffmpeg.wasm 加载失败:", e);
+        showToast("处理引擎加载失败，请刷新重试");
+        throw e;
+      } finally {
+        ffmpegLoading = false;
+      }
+    }
+
+    /**
+     * 用 ffmpeg.wasm 从本地视频提取音频（WAV 格式）
+     */
+    async function extractAudioLocal(videoFileObj) {
+      await loadFFmpeg();
+      const ffmpeg = ffmpegInstance;
+
+      const videoData = new Uint8Array(await videoFileObj.arrayBuffer());
+      const inputName = "input_video" + getExtension(videoFileObj.name);
+      const outputName = "extracted_audio.wav";
+
+      await ffmpeg.writeFile(inputName, videoData);
+      await ffmpeg.exec([
+        "-i", inputName,
+        "-vn",
+        "-acodec", "pcm_s16le",
+        "-ar", "44100",
+        "-ac", "1",
+        outputName
+      ]);
+      const outputData = await ffmpeg.readFile(outputName);
+
+      // 清理内存
+      await ffmpeg.deleteFile(inputName);
+      await ffmpeg.deleteFile(outputName);
+
+      return new File([outputData.buffer], "extracted_audio.wav", { type: "audio/wav" });
+    }
+
+    /**
+     * 用 ffmpeg.wasm 在本地完成最终混音：原视频 + 对齐音频 → 成品视频
+     */
+    async function mixAudioLocal(videoFileObj, alignedAudioBlob, originalVolume, alignedVolume) {
+      await loadFFmpeg();
+      const ffmpeg = ffmpegInstance;
+
+      const videoData = new Uint8Array(await videoFileObj.arrayBuffer());
+      const audioData = new Uint8Array(await alignedAudioBlob.arrayBuffer());
+
+      const inputVideoName = "input_video" + getExtension(videoFileObj.name);
+      const inputAudioName = "aligned_audio.wav";
+      const outputName = "output.mp4";
+
+      await ffmpeg.writeFile(inputVideoName, videoData);
+      await ffmpeg.writeFile(inputAudioName, audioData);
+
+      // 混音：原视频音频降音量 + 对齐音频，视频流直接 copy
+      await ffmpeg.exec([
+        "-i", inputVideoName,
+        "-i", inputAudioName,
+        "-filter_complex",
+        `[0:a]volume=${originalVolume}[a0];[1:a]volume=${alignedVolume}[a1];[a0][a1]amix=inputs=2:duration=first:dropout_transition=0[aout]`,
+        "-map", "0:v",
+        "-map", "[aout]",
+        "-c:v", "copy",
+        "-c:a", "aac",
+        "-b:a", "192k",
+        "-movflags", "+faststart",
+        outputName
+      ]);
+
+      const outputData = await ffmpeg.readFile(outputName);
+
+      // 清理内存
+      await ffmpeg.deleteFile(inputVideoName);
+      await ffmpeg.deleteFile(inputAudioName);
+      await ffmpeg.deleteFile(outputName);
+
+      return new Blob([outputData.buffer], { type: "video/mp4" });
+    }
+
+    function getExtension(filename) {
+      const idx = filename.lastIndexOf(".");
+      return idx >= 0 ? filename.substring(idx) : ".mp4";
+    }
+
+    /* =========================
        基础元素
     ========================= */
 
@@ -1640,8 +1753,16 @@
         submitBtn.disabled = true;
         progressBar.style.width = "5%";
 
+        // ===== 第一步：本地提取音频（ffmpeg.wasm）=====
+        showToast("正在本地提取音频（不消耗服务器带宽）...");
+        progressBar.style.width = "10%";
+        const extractedAudioFile = await extractAudioLocal(file);
+        progressBar.style.width = "25%";
+        showToast("音频提取完成，正在上传到服务器...");
+
+        // ===== 第二步：只上传音频到服务器 =====
         const formData = new FormData();
-        formData.append("videoFile", file);
+        formData.append("extractedAudio", extractedAudioFile);
         if (audio) {
           formData.append("audioFile", audio);
         }
@@ -1652,8 +1773,7 @@
         formData.append("alignedVolume", alignedVolume.value);
         formData.append("remark", document.getElementById("remark").value);
 
-        showToast("正在上传...");
-        const res = await fetch(`${API_BASE_URL}/api/upload`, {
+        const res = await fetch(`${API_BASE_URL}/api/upload_audio`, {
           method: "POST",
           body: formData,
         });
@@ -1663,8 +1783,11 @@
           throw new Error(data.error || "上传失败");
         }
 
-        showToast("任务已创建，开始处理");
-        pollTaskStatus(data.task_id);
+        showToast("音频已上传，服务器正在处理对齐...");
+        progressBar.style.width = "35%";
+
+        // ===== 第三步：轮询服务器任务状态，完成后本地混音 =====
+        pollTaskStatusAndMix(data.task_id, file);
       } catch (err) {
         console.error(err);
         showToast(err.message || "提交失败");
@@ -1685,9 +1808,82 @@
     }
 
     /* =========================
-       后端任务轮询
+       后端任务轮询（新版：拿到对齐音频后本地混音）
     ========================= */
 
+    function pollTaskStatusAndMix(taskId, localVideoFile) {
+      if (currentTaskTimer) {
+        clearInterval(currentTaskTimer);
+      }
+
+      currentTaskTimer = setInterval(async () => {
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/tasks/${taskId}`);
+          const data = await res.json();
+
+          if (!res.ok) {
+            throw new Error(data.detail || "查询任务失败");
+          }
+
+          // 服务器端进度映射到 35%~70% 区间
+          let serverProgress = Number(data.progress || 0);
+          if (serverProgress <= 1) serverProgress *= 100;
+          const displayProgress = 35 + serverProgress * 0.35;
+          progressBar.style.width = Math.min(displayProgress, 70) + "%";
+
+          const detail = data.detail || data.status || data.state || "处理中";
+          showToast(detail);
+
+          if (data.state === "SUCCESS") {
+            clearInterval(currentTaskTimer);
+            currentTaskTimer = null;
+            progressBar.style.width = "70%";
+            showToast("服务器对齐完成，正在下载对齐音频...");
+
+            // 下载对齐后的音频
+            const outputUrl = data.output_url || "";
+            const audioUrl = outputUrl.startsWith("http") ? outputUrl : `${API_BASE_URL}${outputUrl}`;
+            const alignedAudioRes = await fetch(audioUrl);
+            if (!alignedAudioRes.ok) throw new Error("下载对齐音频失败");
+            const alignedAudioBlob = await alignedAudioRes.blob();
+
+            progressBar.style.width = "80%";
+            showToast("正在本地混音（视频不离开你的电脑）...");
+
+            // 本地混音
+            const ovol = data.original_volume || 0.4;
+            const avol = data.aligned_volume || 0.8;
+            const finalVideoBlob = await mixAudioLocal(localVideoFile, alignedAudioBlob, ovol, avol);
+
+            progressBar.style.width = "100%";
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            showToast("处理完成！");
+
+            // 创建本地下载链接并预览
+            const blobUrl = URL.createObjectURL(finalVideoBlob);
+            openResultModal(blobUrl);
+          }
+
+          if (data.state === "FAILURE") {
+            clearInterval(currentTaskTimer);
+            currentTaskTimer = null;
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            showToast("处理失败：" + (data.detail || "未知错误"));
+          }
+        } catch (err) {
+          clearInterval(currentTaskTimer);
+          currentTaskTimer = null;
+          isSubmitting = false;
+          submitBtn.disabled = false;
+          console.error(err);
+          showToast(err.message || "处理失败");
+        }
+      }, 1500);
+    }
+
+    // 保留旧版轮询函数（兼容旧接口，如果仍需使用 /api/upload）
     function pollTaskStatus(taskId) {
       if (currentTaskTimer) {
         clearInterval(currentTaskTimer);
@@ -1776,12 +1972,14 @@
     function handleTaskSuccess(data) {
       const outputUrl = data.output_url || "";
       if (!outputUrl) {
-        showToast("任务完成，但未返回结果视频地址");
+        showToast("任务完成，但未返回结果地址");
         return;
       }
-      const fullUrl = outputUrl.startsWith("http") ? outputUrl : `${API_BASE_URL}${outputUrl}`;
+      const fullUrl = outputUrl.startsWith("http") || outputUrl.startsWith("blob:")
+        ? outputUrl
+        : `${API_BASE_URL}${outputUrl}`;
       showToast("处理完成，点击预览结果视频");
-      console.log("任务完成，结果视频：", fullUrl);
+      console.log("任务完成，结果：", fullUrl);
       openResultModal(fullUrl);
     }
 

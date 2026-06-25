@@ -17,6 +17,10 @@ except Exception:
 
 logger = get_task_logger(__name__)
 
+# ========================================
+# 新版轻量任务：仅处理音频（前端负责视频混音）
+# ========================================
+
 
 # 一些默认配置兜底
 DEFAULT_TEMP_DIR = getattr(Config, "TEMP_DIR", "./temp")
@@ -395,4 +399,119 @@ def process_video_task(
     finally:
         # 只清理这个任务自己的 workspace
         # 不要删整个 TEMP_DIR，更不要删系统临时目录
+        shutil.rmtree(workspace, ignore_errors=True)
+
+
+# =========================
+# 轻量版任务：仅处理音频（视频不上传服务器）
+# =========================
+@celery.task(bind=True, base=VideoProcessingTask, name="tasks.process_audio_only_task")
+def process_audio_only_task(
+    self,
+    extracted_audio_path: str,
+    song_name: str,
+    game_name: Optional[str] = None,
+    reference_audio_path: Optional[str] = None,
+    original_volume: float = 0.4,
+    aligned_volume: float = 0.8,
+) -> Dict[str, Any]:
+    """
+    轻量版任务：前端已用 ffmpeg.wasm 从视频中提取音频并上传。
+    本任务只做：降噪 → 获取参考音频 → 对齐 → 返回对齐后的音频文件。
+    前端拿到对齐音频后，在本地完成与视频的混音。
+
+    好处：
+    - 上传/下载只有几 MB 音频，不再传输几百 MB 视频
+    - 服务器带宽压力降低 90%+
+    """
+    task_id = self.request.id
+
+    workspace = _build_task_workspace(task_id)
+    result_dir = _build_result_dir(task_id)
+    aligned_output_path = os.path.join(result_dir, "aligned_audio.wav")
+
+    denoised_audio_path = os.path.join(workspace, "denoised_audio.wav")
+
+    try:
+        # 0. 基础校验
+        if not os.path.exists(extracted_audio_path):
+            raise FileNotFoundError(f"提取的音频文件不存在: {extracted_audio_path}")
+
+        if not song_name and not reference_audio_path:
+            raise ValueError("song_name 和 reference_audio_path 至少需要提供一个")
+
+        # 1. 音频降噪
+        _update_progress(
+            self,
+            status="denoising_audio",
+            progress=0.20,
+            detail="正在对音频进行降噪处理...",
+        )
+
+        denoised_audio_path = _call_denoise_audio(extracted_audio_path, denoised_audio_path)
+
+        # 2. 获取参考音频
+        _update_progress(
+            self,
+            status="loading_reference_audio",
+            progress=0.45,
+            detail="正在准备参考音频...",
+        )
+
+        reference_audio = _resolve_reference_audio(
+            song_name=song_name,
+            workspace=workspace,
+            reference_audio_path=reference_audio_path,
+        )
+
+        # 3. 音频对齐
+        _update_progress(
+            self,
+            status="aligning_audio",
+            progress=0.70,
+            detail="正在进行音频对齐计算...",
+        )
+
+        alignment_raw = align_audio(denoised_audio_path, reference_audio)
+        alignment_info = _normalize_alignment_result(alignment_raw)
+
+        # 对齐后的音频路径
+        aligned_audio_from_result = (
+            alignment_raw.get("output_audio_path")
+            if isinstance(alignment_raw, dict)
+            else None
+        )
+
+        # 4. 将对齐结果复制到 result 目录（不会被 workspace 清理删掉）
+        _update_progress(
+            self,
+            status="saving_result",
+            progress=0.90,
+            detail=f"音频对齐完成，重合率 {alignment_info.get('match_ratio', 0):.2%}，正在保存结果...",
+        )
+
+        source_aligned = aligned_audio_from_result or denoised_audio_path
+        shutil.copy2(source_aligned, aligned_output_path)
+
+        # 5. 返回结果
+        output_url = _build_output_url(task_id, "aligned_audio.wav")
+
+        return {
+            "status": "success",
+            "task_id": task_id,
+            "progress": 1.0,
+            "detail": "音频对齐完成，请在前端完成混音",
+            "output_url": output_url,
+            "audio_alignment": alignment_info,
+            "song_name": song_name,
+            "game_name": game_name,
+            "original_volume": original_volume,
+            "aligned_volume": aligned_volume,
+        }
+
+    except Exception as e:
+        logger.exception("音频任务执行失败 task_id=%s", task_id)
+        raise
+
+    finally:
         shutil.rmtree(workspace, ignore_errors=True)

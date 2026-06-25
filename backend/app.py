@@ -7,11 +7,19 @@ import os
 from config import Config
 from celery_app import celery
 from celery.result import AsyncResult
-from task import process_video_task
+from task import process_video_task, process_audio_only_task
 
 app = Flask(__name__)
 # 允许跨域，方便直接打开前端 HTML 文件进行测试
 CORS(app, resources=r"/*")
+
+
+# ffmpeg.wasm 需要 SharedArrayBuffer，必须设置这两个响应头
+@app.after_request
+def add_security_headers(response):
+    response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+    response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
+    return response
 
 # 确保目录存在
 os.makedirs(Config.UPLOAD_DIR, exist_ok=True)
@@ -145,6 +153,63 @@ def download_result(task_id, filename):
     """
     directory = os.path.join(Config.RESULT_DIR, task_id)
     return send_from_directory(directory, filename, as_attachment=False)
+
+
+@app.route("/api/upload_audio", methods=["POST"])
+def upload_audio_only():
+    """
+    轻量版接口：前端用 ffmpeg.wasm 本地提取音频后，只上传音频文件。
+    服务器做降噪 + 对齐，返回对齐后的音频供前端本地混音。
+    带宽消耗从几百 MB 视频降低到几 MB 音频。
+    """
+    extracted_audio = request.files.get("extractedAudio")
+    reference_audio_file = request.files.get("audioFile")
+    song_name = request.form.get("songName", "").strip()
+    game_name = request.form.get("gameName", "").strip() or None
+    original_volume = float(request.form.get("originalVolume", "0.4"))
+    aligned_volume = float(request.form.get("alignedVolume", "0.8"))
+
+    if not extracted_audio:
+        return jsonify({"error": "缺少提取的音频文件"}), 400
+
+    if not allowed_audio_file(extracted_audio.filename):
+        return jsonify({"error": "不支持的音频格式"}), 400
+
+    # 保存上传的提取音频
+    upload_id = uuid.uuid4().hex
+    upload_dir = os.path.join(Config.UPLOAD_DIR, upload_id)
+    os.makedirs(upload_dir, exist_ok=True)
+
+    audio_filename = secure_filename(extracted_audio.filename) or "extracted.wav"
+    extracted_audio_path = os.path.join(upload_dir, audio_filename)
+    extracted_audio.save(extracted_audio_path)
+
+    # 保存参考音频（如有）
+    reference_audio_path = None
+    if reference_audio_file:
+        if not allowed_audio_file(reference_audio_file.filename):
+            return jsonify({"error": "不支持的参考音频格式"}), 400
+        ref_filename = secure_filename(reference_audio_file.filename)
+        reference_audio_path = os.path.join(upload_dir, ref_filename)
+        reference_audio_file.save(reference_audio_path)
+
+    if not song_name and not reference_audio_path:
+        return jsonify({"error": "song_name 和参考音频至少提供一个"}), 400
+
+    # 启动轻量版 Celery 异步任务
+    task = process_audio_only_task.delay(
+        extracted_audio_path=extracted_audio_path,
+        song_name=song_name,
+        game_name=game_name,
+        reference_audio_path=reference_audio_path,
+        original_volume=original_volume,
+        aligned_volume=aligned_volume,
+    )
+
+    return jsonify({
+        "task_id": task.id,
+        "message": "音频任务已创建",
+    })
 
 
 if __name__ == "__main__":
