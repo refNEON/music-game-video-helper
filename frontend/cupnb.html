@@ -1399,7 +1399,7 @@
     let ffmpegLoading = false;
 
     // 使用 CDN 加载 ffmpeg.wasm（@0.12.x UMD 版本）
-    const FFMPEG_CORE_URL = "/backend/static/ffmpeg/ffmpeg-core.js";
+    const FFMPEG_CORE_URL = "/static/ffmpeg/ffmpeg-core.js";
     async function loadFFmpeg() {
   if (ffmpegLoaded) return;
   if (ffmpegLoading) {
@@ -1411,7 +1411,7 @@
   showToast("正在加载音视频处理引擎...");
   try {
     // 1. 替换远程unpkg import为本地静态index.js
-    const baseUrl = "/backend/static/ffmpeg";
+    const baseUrl = "/static/ffmpeg";
     const { FFmpeg } = await import(`${baseUrl}/index.js`);
     
     ffmpegInstance = new FFmpeg();
