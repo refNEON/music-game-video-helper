@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>关注杯子喵 - 关注杯子谢谢喵~</title>
+
+  <style>
+    :root {
+      --bg1: #060914;
+      --bg2: #0d1630;
+      --bg3: #20114b;
+
+      --primary: #7c5cff;
+      --primary2: #55dbff;
+      --accent: #ff7ad9;
+
+      --text: #eef3ff;
+      --muted: #9faad6;
+
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass2: rgba(255, 255, 255, 0.12);
+      --line: rgba(255, 255, 255, 0.14);
+
+      --radius: 26px;
+      --shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family:
+        Inter,
+        "PingFang SC",
+        "Microsoft YaHei",
+        system-ui,
+        sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(85, 219, 255, 0.18), transparent 25%),
+        radial-gradient(circle at 82% 12%, rgba(124, 92, 255, 0.22), transparent 26%),
+        radial-gradient(circle at 72% 82%, rgba(255, 122, 217, 0.14), transparent 30%),
+        linear-gradient(135deg, var(--bg1), var(--bg2) 48%, var(--bg3));
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(120deg, transparent, rgba(255,255,255,0.025), transparent);
+      mix-blend-mode: screen;
+      z-index: -1;
+    }
+
+    .mouse-glow {
+      position: fixed;
+      width: 430px;
+      height: 430px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(85, 219, 255, 0.13), transparent 62%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      filter: blur(26px);
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 30px 20px 60px;
+    }
+
+    .container {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      box-shadow: 0 0 20px rgba(85, 219, 255, 0.85);
+    }
+
+    .brand strong {
+      letter-spacing: 0.02em;
+    }
+
+    .brand span:last-child {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      position: relative;
+      min-height: 306px;
+      margin-top: 22px;
+      border-radius: 34px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      background:
+        radial-gradient(circle at 18% 26%, rgba(85, 219, 255, 0.16), transparent 25%),
+        radial-gradient(circle at 84% 74%, rgba(124, 92, 255, 0.22), transparent 28%),
+        linear-gradient(135deg, rgba(255,255,255,0.095), rgba(255,255,255,0.035));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.03) 0,
+          rgba(255,255,255,0.03) 1px,
+          transparent 1px,
+          transparent 18px
+        );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      padding: 104px 34px 34px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      max-width: 780px;
+      font-size: clamp(30px, 5vw, 56px);
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 700px;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: #dbe7ff;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .hero-side-note {
+      min-width: 230px;
+      max-width: 280px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.13);
+    }
+
+    .hero-side-note strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .hero-side-note span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* =========================
+       HANGING POSTER
+    ========================= */
+
+    .poster-area {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      width: 460px;
+      height: 174px;
+      transform: translateX(-50%);
+      z-index: 8;
+      pointer-events: none;
+    }
+
+    .poster-pin {
+      position: absolute;
+      top: 4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 30%, #ffffff, #a7c4ff 45%, #6076ff 100%);
+      box-shadow:
+        0 0 16px rgba(118, 153, 255, 0.75),
+        inset 0 -3px 6px rgba(0,0,0,0.22);
+      z-index: 10;
+    }
+
+    .poster-pin.left {
+      left: 76px;
+    }
+
+    .poster-pin.right {
+      right: 76px;
+    }
+
+    .poster-string {
+      position: absolute;
+      top: 12px;
+      width: 2px;
+      height: 31px;
+      background: linear-gradient(to bottom, rgba(240,246,255,0.8), rgba(240,246,255,0.25));
+      transform-origin: top center;
+      z-index: 7;
+    }
+
+    .poster-string.left {
+      left: 84px;
+    }
+
+    .poster-string.right {
+      right: 84px;
+    }
+
+    .hanging-poster {
+      position: absolute;
+      top: 32px;
+      left: 50%;
+      width: 420px;
+      height: 116px;
+      transform: translateX(-50%);
+      transform-origin: top center;
+      border-radius: 22px 22px 24px 24px;
+      overflow: hidden;
+      cursor: grab;
+      pointer-events: auto;
+      user-select: none;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.08);
+      box-shadow:
+        0 28px 42px rgba(0,0,0,0.34),
+        0 0 26px rgba(85,219,255,0.12);
+      clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 88%,
+        94% 93%,
+        84% 89%,
+        72% 94%,
+        61% 90%,
+        49% 95%,
+        37% 90%,
+        25% 94%,
+        13% 90%,
+        0 93%
+      );
+      will-change: transform;
+    }
+
+    .hanging-poster.dragging {
+      cursor: grabbing;
+    }
+
+    .poster-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      filter: saturate(1.18) contrast(1.05) brightness(0.92);
+    }
+
+    /*
+      如果你暂时没有海报图片，这个 .poster-fallback 会显示一个内置的假海报。
+      你后面把 .poster-img 的 src 换成自己的图即可。
+    */
+    .poster-fallback {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 38%, rgba(255,255,255,0.75), transparent 8%),
+        radial-gradient(circle at 70% 42%, rgba(85,219,255,0.34), transparent 22%),
+        radial-gradient(circle at 86% 20%, rgba(255,122,217,0.35), transparent 16%),
+        linear-gradient(135deg, #121833, #233e8b 48%, #7e5dff);
+      pointer-events: none;
+    }
+
+    .poster-fallback::before {
+      content: "这里设计失误";
+      position: absolute;
+      left: 26px;
+      bottom: 28px;
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.86);
+      text-shadow: 0 3px 12px rgba(0,0,0,0.42);
+    }
+
+    .poster-fallback::after {
+      content: "回头跟你商量一下再改";
+      position: absolute;
+      right: 26px;
+      bottom: 22px;
+      font-size: 11px;
+      color: rgba(230,240,255,0.7);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hanging-poster::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          105deg,
+          rgba(255,255,255,0.28) 0%,
+          rgba(255,255,255,0.08) 24%,
+          transparent 48%,
+          rgba(255,255,255,0.1) 74%,
+          rgba(255,255,255,0.2) 100%
+        );
+      mix-blend-mode: screen;
+    }
+
+    .hanging-poster::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.035) 0,
+          rgba(255,255,255,0.035) 1px,
+          transparent 1px,
+          transparent 7px
+        );
+      opacity: 0.5;
+    }
+
+    /* =========================
+       MAIN LAYOUT
+    ========================= */
+
+    .main {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      margin-top: 26px;
+    }
+
+    .card {
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.13);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+    }
+
+    .form-card {
+      padding: 24px;
+      transform-style: preserve-3d;
+      transition: transform 0.12s ease-out;
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 25px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      margin: 0 0 22px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .dropzone {
+      position: relative;
+      display: block;
+      margin-bottom: 20px;
+      padding: 30px 18px;
+      text-align: center;
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1.5px dashed rgba(255,255,255,0.22);
+      background:
+        radial-gradient(circle at 28% 28%, rgba(85,219,255,0.13), transparent 24%),
+        linear-gradient(135deg, rgba(124,92,255,0.15), rgba(85,219,255,0.08));
+      transition: 0.24s ease;
+    }
+
+    .dropzone:hover,
+    .dropzone.dragover {
+      transform: translateY(-2px);
+      border-color: rgba(85,219,255,0.62);
+      box-shadow: 0 0 0 5px rgba(85,219,255,0.075);
+    }
+
+    .dropzone::before {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background: linear-gradient(120deg, transparent 35%, rgba(255,255,255,0.13), transparent 65%);
+      transform: translateX(-100%) rotate(8deg);
+      animation: shine 4.5s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shine {
+      to {
+        transform: translateX(100%) rotate(8deg);
+      }
+    }
+
+    .upload-icon {
+      position: relative;
+      z-index: 1;
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.1);
+      font-size: 30px;
+      box-shadow: inset 0 0 24px rgba(255,255,255,0.07);
+    }
+
+    .dropzone h3,
+    .dropzone p,
+    .file-name {
+      position: relative;
+      z-index: 1;
+    }
+
+    .dropzone h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .dropzone p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .file-name {
+      margin-top: 12px;
+      color: #c8fff6;
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .range-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .range-value {
+      font-size: 13px;
+      color: var(--primary2);
+      font-weight: 700;
+      min-width: 36px;
+      text-align: right;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 90%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      outline: none;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      box-shadow: 0 0 12px rgba(85,219,255,0.4);
+      border: 2px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      box-shadow: 0 0 12px rgba(85,219,255,0.4);
+      border: 2px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: #dfe8ff;
+      font-size: 13px;
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      outline: none;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.13);
+      background: rgba(8, 12, 28, 0.58);
+      color: var(--text);
+      padding: 14px 14px;
+      font-size: 14px;
+      transition: 0.2s ease;
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+      border-color: rgba(85,219,255,0.55);
+      box-shadow: 0 0 0 5px rgba(85,219,255,0.08);
+    }
+
+    .textarea {
+      min-height: 98px;
+      resize: vertical;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      border: 0;
+      outline: 0;
+      cursor: pointer;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      transition: 0.22s ease;
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      box-shadow:
+        0 10px 30px rgba(85,219,255,0.22),
+        0 10px 28px rgba(124,92,255,0.26);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.07);
+    }
+
+    .btn-ghost {
+      color: #e9efff;
+      background: rgba(255,255,255,0.075);
+      border: 1px solid rgba(255,255,255,0.13);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .pill {
+      padding: 8px 11px;
+      border-radius: 999px;
+      color: #dbe7ff;
+      font-size: 12px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .progress {
+      height: 10px;
+      margin-top: 18px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.075);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), var(--primary2), var(--accent));
+      transition: width 0.25s ease;
+    }
+
+    /* =========================
+       SIDE PANELS
+    ========================= */
+
+    .side {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .panel {
+      padding: 20px;
+    }
+
+    .panel h3 {
+      margin: 0 0 8px;
+    }
+
+    .panel-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .stat-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .stat {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .stat strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 17px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    /* =========================
+       PETS
+    ========================= */
+
+    .pet-stage {
+      position: relative;
+      min-height: 330px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 26% 28%, rgba(85,219,255,0.14), transparent 24%),
+        radial-gradient(circle at 80% 28%, rgba(255,122,217,0.13), transparent 24%),
+        linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035));
+    }
+
+    .pet-cluster {
+      position: relative;
+      height: 225px;
+      margin-top: 16px;
+    }
+
+    .mini-pet {
+      position: absolute;
+      width: var(--size);
+      height: var(--size);
+      left: var(--x);
+      top: var(--y);
+      transform-origin: 50% 80%;
+      will-change: transform;
+      filter: drop-shadow(0 18px 26px rgba(0,0,0,0.26));
+      user-select: none;
+    }
+
+    .mini-pet-body {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 38% 38% 44% 44%;
+      background:
+        radial-gradient(circle at 32% 24%, rgba(255,255,255,0.95), rgba(255,255,255,0.25) 20%, transparent 24%),
+        linear-gradient(145deg, var(--c1), var(--c2) 54%, var(--c3));
+      box-shadow:
+        inset 0 -14px 20px rgba(0,0,0,0.18),
+        inset 0 8px 16px rgba(255,255,255,0.13);
+      animation: petBreath 3.2s ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes petBreath {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-5px) scale(1.025, 0.985);
+      }
+    }
+
+    .mini-pet-ear {
+      position: absolute;
+      top: -14%;
+      width: 30%;
+      height: 42%;
+      border-radius: 999px 999px 30% 30%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.8), var(--c1) 38%, var(--c2));
+      box-shadow: inset 0 -8px 10px rgba(0,0,0,0.12);
+      z-index: -1;
+    }
+
+    .mini-pet-ear.left {
+      left: 17%;
+      transform: rotate(-22deg);
+    }
+
+    .mini-pet-ear.right {
+      right: 17%;
+      transform: rotate(22deg);
+    }
+
+    .mini-pet-face {
+      position: absolute;
+      left: 50%;
+      top: 38%;
+      width: 58%;
+      height: 42%;
+      transform: translate(-50%, -50%);
+    }
+
+    .pet-eyes {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pet-eye {
+      position: relative;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.95);
+      overflow: hidden;
+      box-shadow: inset 0 0 0 2px rgba(70,80,130,0.13);
+    }
+
+    .pet-pupil {
+      position: absolute;
+      left: 7px;
+      top: 7px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #111a35;
+      will-change: transform;
+    }
+
+    .pet-mouth {
+      width: 19px;
+      height: 10px;
+      margin: 10px auto 0;
+      border-bottom: 3px solid rgba(20,30,70,0.62);
+      border-radius: 0 0 999px 999px;
+    }
+
+    .pet-name {
+      position: absolute;
+      left: 50%;
+      bottom: -23px;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 12px;
+      color: rgba(224,233,255,0.82);
+    }
+
+    .pet-orb {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(85,219,255,0.9);
+      box-shadow: 0 0 14px rgba(85,219,255,0.8);
+      animation: orbFloat 3s ease-in-out infinite;
+    }
+
+    .pet-orb.o1 {
+      left: 18px;
+      top: 38px;
+    }
+
+    .pet-orb.o2 {
+      right: 34px;
+      top: 62px;
+      animation-delay: 1s;
+      background: rgba(255,122,217,0.9);
+      box-shadow: 0 0 14px rgba(255,122,217,0.8);
+    }
+
+    .pet-orb.o3 {
+      left: 50%;
+      bottom: 26px;
+      animation-delay: 1.6s;
+      background: rgba(150,120,255,0.9);
+      box-shadow: 0 0 14px rgba(150,120,255,0.8);
+    }
+
+    @keyframes orbFloat {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.72;
+      }
+      50% {
+        transform: translateY(-14px) scale(1.15);
+        opacity: 1;
+      }
+    }
+
+    .tips ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translate(-50%, 24px);
+      opacity: 0;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(12, 18, 40, 0.82);
+      border: 1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.42);
+      color: #eaf0ff;
+      font-size: 14px;
+      pointer-events: none;
+      transition: 0.28s ease;
+      z-index: 50;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: rgba(220,230,255,0.6);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    @media (max-width: 980px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+
+      .poster-area {
+        transform: translateX(-50%) scale(0.92);
+      }
+
+      .hero-content {
+        padding-top: 112px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        padding: 22px 14px 46px;
+      }
+
+      .hero {
+        min-height: 390px;
+      }
+
+      .hero-content {
+        padding: 126px 20px 24px;
+      }
+
+      .poster-area {
+        top: 10px;
+        transform: translateX(-50%) scale(0.74);
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-card,
+      .panel {
+        padding: 18px;
+      }
+
+      .brand {
+        max-width: 100%;
+        flex-wrap: wrap;
+      }
+    }
+
+    /* =========================
+       结果预览弹窗
+    ========================= */
+    .result-modal-mask {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(2, 5, 16, 0.75);
+      backdrop-filter: blur(16px);
+    }
+
+    .result-modal-mask.show {
+      display: flex;
+    }
+
+    .result-modal {
+      width: min(960px, 100%);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)),
+        rgba(8, 12, 30, 0.92);
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 34px 100px rgba(0,0,0,0.55);
+    }
+
+    .result-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .result-modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .result-modal-body {
+      flex: 1;
+      overflow: auto;
+      padding: 20px 22px;
+    }
+
+    .result-modal-body video {
+      width: 100%;
+      max-height: 60vh;
+      display: block;
+      border-radius: 20px;
+      background: #02040c;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .result-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 14px 22px 18px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .modal-close-x {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      color: #eef3ff;
+      font-size: 22px;
+      line-height: 1;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.13);
+      transition: 0.2s ease;
+    }
+
+    .modal-close-x:hover {
+      background: rgba(255,255,255,0.16);
+      transform: rotate(5deg);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="mouse-glow" id="mouseGlow"></div>
+
+  <div class="page">
+    <header class="container">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <strong>关注杯子喵</strong>
+        <span>关注不是杯子喵~</span>
+      </div>
+
+      <section class="hero">
+        <!-- 顶部海报挂图 -->
+        <div class="poster-area" id="posterArea">
+          <div class="poster-pin left"></div>
+          <div class="poster-pin right"></div>
+          <div class="poster-string left" id="leftString"></div>
+          <div class="poster-string right" id="rightString"></div>
+
+          <div class="hanging-poster" id="hangingPoster" title="按住拖拽海报试试看">
+            <!--
+              如果你有自己的海报图片，把下面 src 改成你的路径即可。
+              例如：
+              src="./assets/decor/arcaea-poster.jpg"
+
+              当前故意给了一个不存在的路径。
+              图片加载失败时，会自动显示内置的渐变假海报。
+            -->
+            <img
+              class="poster-img"
+              id="posterImg"
+              src="./assets/decor/arcaea-poster.jpg"
+              alt="装饰海报"
+            />
+            <div class="poster-fallback" id="posterFallback"></div>
+          </div>
+        </div>
+
+        <div class="hero-content">
+          <div>
+            <h1>这里设计失误了<br />回头我再改改</h1>
+            <p>
+              上传你的音游手元视频，填写歌名与游戏名，让系统自动创建对齐任务。
+              布拉布拉布拉的，写点简介上去
+            </p>
+
+            <div class="tag-row">
+              <span class="tag">视频上传</span>
+              <span class="tag">音频对齐</span>
+              <span class="tag">节拍分析</span>
+              <span class="tag">偏移校准</span>
+              <span class="tag">手元同步</span>
+            </div>
+          </div>
+
+          <div class="hero-side-note">
+            <strong>这块不知道写点啥</strong>
+            <span>
+              算了先留着吧            </span>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main class="container main">
+      <section class="card form-card" id="tiltCard">
+        <h2 class="section-title">提交任务</h2>
+        <p class="section-desc">
+          上传视频并填写信息，后端会启动 Celery 异步任务进行音频对齐处理。处理完成后可播放结果视频。
+        </p>
+
+        <label class="dropzone" id="dropzone" for="videoFile">
+          <input type="file" id="videoFile" accept="video/*" />
+          <div class="upload-icon">🎬</div>
+          <h3>点击或拖拽上传手元视频</h3>
+          <p>支持 mp4 / mov / webm 等常见视频格式</p>
+          <div class="file-name" id="fileName">尚未选择文件</div>
+        </label>
+
+        <label class="dropzone" id="audioDropzone" for="audioFile">
+          <input type="file" id="audioFile" accept="audio/*" />
+          <div class="upload-icon">🎵</div>
+          <h3>点击或拖拽上传参考音频</h3>
+          <p>支持 mp3 / wav / flac / ogg 等常见音频格式</p>
+          <div class="file-name" id="audioFileName">尚未选择文件</div>
+        </label>
+
+        <div class="grid">
+          <div class="field">
+            <label for="songName">歌名</label>
+            <input class="input" id="songName" type="text" placeholder="例如：Grievous Lady" />
+          </div>
+
+        <div class="field">
+            <div class="range-header">
+              <label for="alignedVolume">混合音频音量</label>
+              <span class="range-value" id="alignedVolumeValue">0.80</span>
+            </div>
+            <input type="range" id="alignedVolume" min="0" max="1" step="0.01" value="0.8" />
+          </div>
+          
+          <div class="field">
+            <label for="difficulty">谱面难度</label>
+            <select class="select" id="difficulty">
+              <option value="">请选择</option>
+              <option>Past / Easy</option>
+              <option>Present / Hard</option>
+              <option>Future / Expert</option>
+              <option>Beyond / Another</option>
+              <option>自定义</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <div class="range-header">
+              <label for="originalVolume">原视频音量</label>
+              <span class="range-value" id="originalVolumeValue">0.40</span>
+            </div>
+            <input type="range" id="originalVolume" min="0" max="1" step="0.01" value="0.4" />
+          </div>
+
+          <div class="field">
+            <label for="gameName">游戏名</label>
+            <input class="input" id="gameName" type="text" placeholder="例如：Arcaea / Phigros / maimai" />
+          </div>
+
+          <label style="display:block;margin-top:12px;font-size:13px;color:var(--muted);">备注</label>
+          <textarea id="remark" rows="2" placeholder="可选，例如：视频开头有黑屏..." style="width:100%;margin-top:4px;padding:10px 14px;background:var(--glass);border:1px solid var(--line);border-radius:14px;color:var(--text);font-size:14px;resize:vertical;font-family:inherit;"></textarea>
+
+        <div style="width:100%;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin:16px 0 4px;">
+          <div id="progressBar" style="width:0%;height:100%;background:linear-gradient(90deg,var(--primary2),var(--primary));border-radius:3px;transition:width 0.4s ease;"></div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" id="submitBtn">提交任务</button>
+          <button class="btn btn-ghost" id="fillDemoBtn">填充示例</button>
+          <span class="pill">✨ Prototype UI v1</span>
+        </div>
+
+      
+      </section>
+
+      <aside class="side">
+        <section class="card panel pet-stage">
+          <h3>感觉好玩就加了</h3>
+          <p class="panel-desc">
+            回头我试试改成大耳帽兜和帽兜娃娃，能做到，但是工程量会有点大，比如眼睛这里我估计得调上一阵子
+          </p>
+
+          <div class="pet-cluster" id="petCluster">
+            <div
+              class="mini-pet"
+              style="--size: 98px; --x: 8%; --y: 78px; --c1:#dff9ff; --c2:#82c9ff; --c3:#6955ef; --delay:0s;"
+            >
+              <div class="mini-pet-body">
+                <div class="mini-pet-ear left"></div>
+                <div class="mini-pet-ear right"></div>
+                <div class="mini-pet-face">
+                  <div class="pet-eyes">
+                    <div class="pet-eye"><div class="pet-pupil"></div></div>
+                    <div class="pet-eye"><div class="pet-pupil"></div></div>
+                  </div>
+                  <div class="pet-mouth"></div>
+                </div>
+              </div>
+              <div class="pet-name">小不</div>
+            </div>
+
+            <div
+              class="mini-pet"
+              style="--size: 122px; --x: 32%; --y: 46px; --c1:#fff0fb; --c2:#ff92d7; --c3:#7758ff; --delay:.4s;"
+            >
+              <div class="mini-pet-body">
+                <div class="mini-pet-ear left"></div>
+                <div class="mini-pet-ear right"></div>
+                <div class="mini-pet-face">
+                  <div class="pet-eyes">
+                    <div class="pet-eye"><div class="pet-pupil"></div></div>
+                    <div class="pet-eye"><div class="pet-pupil"></div></div>
+                  </div>
+                  <div class="pet-mouth"></div>
+                </div>
+              </div>
+              <div class="pet-name">小是</div>
+            </div>
+
+            <div
+              class="mini-pet"
+              style="--size: 90px; --x: 69%; --y: 88px; --c1:#ecfff7; --c2:#5ee6c6; --c3:#4f72f0; --delay:.9s;"
+            >
+              <div class="mini-pet-body">
+                <div class="mini-pet-ear left"></div>
+                <div class="mini-pet-ear right"></div>
+                <div class="mini-pet-face">
+                  <div class="pet-eyes">
+                    <div class="pet-eye"><div class="pet-pupil"></div></div>
+                    <div class="pet-eye"><div class="pet-pupil"></div></div>
+                  </div>
+                  <div class="pet-mouth"></div>
+                </div>
+              </div>
+              <div class="pet-name">小杯</div>
+            </div>
+
+            <div
+              class="mini-pet"
+              style="--size: 74px; --x: 52%; --y: 142px; --c1:#f3f0ff; --c2:#a48cff; --c3:#3b5de8; --delay:1.3s;"
+            >
+              <div class="mini-pet-body">
+                <div class="mini-pet-ear left"></div>
+                <div class="mini-pet-ear right"></div>
+                <div class="mini-pet-face">
+                  <div class="pet-eyes">
+                    <div class="pet-eye"><div class="pet-pupil"></div></div>
+                    <div class="pet-eye"><div class="pet-pupil"></div></div>
+                  </div>
+                  <div class="pet-mouth"></div>
+                </div>
+              </div>
+              <div class="pet-name">小子</div>
+            </div>
+
+            <span class="pet-orb o1"></span>
+            <span class="pet-orb o2"></span>
+            <span class="pet-orb o3"></span>
+          </div>
+        </section>
+
+        <section class="card panel">
+          <h3>任务侧栏</h3>
+          <p class="panel-desc">
+            这里可以后续扩展成任务状态、对齐结果和处理日志。
+          </p>
+
+          <div class="stat-list">
+            <div class="stat">
+              <strong>自动对齐</strong>
+              <span>后续可以接入音频峰值检测、节拍锚点、谱面时间轴和波形匹配。</span>
+            </div>
+
+            <div class="stat">
+              <strong>偏移校正</strong>
+              <span>未来可加入毫秒级 offset 调节、视频帧率修正、手动打点辅助。</span>
+            </div>
+
+            <div class="stat">
+              <strong>结果预览</strong>
+              <span>可以扩展时间轴预览、对齐前后对比、波形轨道和导出按钮。</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="card panel tips">
+          <h3>下一步可加功能</h3>
+          <ul>
+            <li>上传后生成音频波形预览</li>
+            <li>提交后显示漂亮的任务卡片</li>
+            <li>加一个毫秒级 offset 微调滑块</li>
+            <li>根据游戏名自动切换主题色</li>
+            <li>增加批量上传和任务队列</li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+
+    <div class="container footer-note">
+      前端演示版 · 可以继续升级成 Vue / React 工程化版本
+    </div>
+  </div>
+
+  <div class="toast" id="toast">任务已提交</div>
+
+  <!-- 结果视频预览弹窗 -->
+  <div class="result-modal-mask" id="resultModalMask">
+    <div class="result-modal">
+      <div class="result-modal-header">
+        <h3>处理结果预览</h3>
+        <button class="modal-close-x" id="closeResultModal">&times;</button>
+      </div>
+      <div class="result-modal-body">
+        <video id="resultVideo" controls></video>
+      </div>
+      <div class="result-modal-footer">
+        <a class="btn btn-primary" id="downloadResultBtn" href="#" target="_blank">下载视频</a>
+        <button class="btn btn-ghost" id="closeResultModal2">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================
+       API 配置
+    ========================= */
+    const API_BASE_URL = "http://localhost:5000";
+    let currentTaskTimer = null;
+    let isSubmitting = false;
+
+    /* =========================
+       基础元素
+    ========================= */
+
+    const mouseGlow = document.getElementById("mouseGlow");
+    const tiltCard = document.getElementById("tiltCard");
+
+    const videoFile = document.getElementById("videoFile");
+    const dropzone = document.getElementById("dropzone");
+    const fileName = document.getElementById("fileName");
+
+    const audioFile = document.getElementById("audioFile");
+    const audioDropzone = document.getElementById("audioDropzone");
+    const audioFileName = document.getElementById("audioFileName");
+
+    const submitBtn = document.getElementById("submitBtn");
+    const fillDemoBtn = document.getElementById("fillDemoBtn");
+    const progressBar = document.getElementById("progressBar");
+    const toast = document.getElementById("toast");
+
+    const posterImg = document.getElementById("posterImg");
+    const posterFallback = document.getElementById("posterFallback");
+
+    /*
+      如果海报图片不存在，显示内置假海报。
+      如果你换成真实图片并加载成功，假海报会自动隐藏。
+    */
+    posterImg.addEventListener("load", () => {
+      posterFallback.style.display = "none";
+    });
+
+    posterImg.addEventListener("error", () => {
+      posterImg.style.display = "none";
+      posterFallback.style.display = "block";
+    });
+
+    /* =========================
+       鼠标全局交互
+    ========================= */
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    window.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      mouseGlow.style.left = mouseX + "px";
+      mouseGlow.style.top = mouseY + "px";
+
+      updatePetEyesAndBodies();
+    });
+
+    /* =========================
+       守护兽：眼睛和身体跟随鼠标
+    ========================= */
+
+    const pets = document.querySelectorAll(".mini-pet");
+    const pupils = document.querySelectorAll(".pet-pupil");
+
+    function updatePetEyesAndBodies() {
+      pupils.forEach((pupil) => {
+        const eye = pupil.parentElement;
+        const rect = eye.getBoundingClientRect();
+
+        const eyeCenterX = rect.left + rect.width / 2;
+        const eyeCenterY = rect.top + rect.height / 2;
+
+        const angle = Math.atan2(mouseY - eyeCenterY, mouseX - eyeCenterX);
+        const distance = Math.hypot(mouseX - eyeCenterX, mouseY - eyeCenterY);
+
+        const maxMove = Math.min(6, distance / 28);
+        const x = Math.cos(angle) * maxMove;
+        const y = Math.sin(angle) * maxMove;
+
+        pupil.style.transform = `translate(${x}px, ${y}px)`;
+      });
+
+      pets.forEach((pet, index) => {
+        const rect = pet.getBoundingClientRect();
+
+        const petCenterX = rect.left + rect.width / 2;
+        const petCenterY = rect.top + rect.height / 2;
+
+        const dx = mouseX - petCenterX;
+        const dy = mouseY - petCenterY;
+
+        const distance = Math.hypot(dx, dy);
+        const angle = Math.atan2(dy, dx);
+
+        const rotate = Math.max(-10, Math.min(10, dx / 38));
+        const lift = Math.max(-10, -80 / Math.max(distance, 80) * 10);
+        const scale = distance < 150 ? 1.045 : 1;
+
+        const offsetX = Math.cos(angle) * Math.min(8, 180 / Math.max(distance, 80));
+        const offsetY = Math.sin(angle) * Math.min(6, 150 / Math.max(distance, 80));
+
+        pet.style.transform =
+          `translate(${offsetX}px, ${lift + offsetY}px) rotate(${rotate}deg) scale(${scale})`;
+      });
+    }
+
+    updatePetEyesAndBodies();
+
+    /* =========================
+       表单卡片轻微 3D 倾斜
+    ========================= */
+
+    tiltCard.addEventListener("mousemove", (e) => {
+      const rect = tiltCard.getBoundingClientRect();
+
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const rotateY = ((x / rect.width) - 0.5) * 7;
+      const rotateX = ((y / rect.height) - 0.5) * -7;
+
+      tiltCard.style.transform =
+        `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    tiltCard.addEventListener("mouseleave", () => {
+      tiltCard.style.transform =
+        `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+    });
+
+    /* =========================
+       上传区域
+    ========================= */
+
+    videoFile.addEventListener("change", () => {
+      const file = videoFile.files[0];
+      fileName.textContent = file ? `已选择：${file.name}` : "尚未选择文件";
+    });
+
+    ["dragenter", "dragover"].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add("dragover");
+      });
+    });
+
+    ["dragleave", "drop"].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove("dragover");
+      });
+    });
+
+    dropzone.addEventListener("drop", (e) => {
+      const files = e.dataTransfer.files;
+
+      if (files && files.length > 0) {
+        videoFile.files = files;
+        fileName.textContent = `已选择：${files[0].name}`;
+      }
+    });
+
+    /* =========================
+       音频上传区域
+    ========================= */
+
+    audioFile.addEventListener("change", () => {
+      const file = audioFile.files[0];
+      audioFileName.textContent = file ? `已选择：${file.name}` : "尚未选择文件";
+    });
+
+    ["dragenter", "dragover"].forEach((eventName) => {
+      audioDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        audioDropzone.classList.add("dragover");
+      });
+    });
+
+    ["dragleave", "drop"].forEach((eventName) => {
+      audioDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        audioDropzone.classList.remove("dragover");
+      });
+    });
+
+    audioDropzone.addEventListener("drop", (e) => {
+      const files = e.dataTransfer.files;
+
+      if (files && files.length > 0) {
+        audioFile.files = files;
+        audioFileName.textContent = `已选择：${files[0].name}`;
+      }
+    });
+
+    /* =========================
+       示例填充和模拟提交
+    ========================= */
+
+    const originalVolume = document.getElementById("originalVolume");
+    const originalVolumeValue = document.getElementById("originalVolumeValue");
+    const alignedVolume = document.getElementById("alignedVolume");
+    const alignedVolumeValue = document.getElementById("alignedVolumeValue");
+
+    function updateRangeDisplay(range, display) {
+      display.textContent = Number(range.value).toFixed(2);
+    }
+
+    originalVolume.addEventListener("input", () => updateRangeDisplay(originalVolume, originalVolumeValue));
+    alignedVolume.addEventListener("input", () => updateRangeDisplay(alignedVolume, alignedVolumeValue));
+
+    fillDemoBtn.addEventListener("click", () => {
+      document.getElementById("songName").value = "Grievous Lady";
+      document.getElementById("gameName").value = "Arcaea";
+      document.getElementById("difficulty").value = "Future / Expert";
+      originalVolume.value = "0.4";
+      alignedVolume.value = "0.8";
+      updateRangeDisplay(originalVolume, originalVolumeValue);
+      updateRangeDisplay(alignedVolume, alignedVolumeValue);
+      document.getElementById("remark").value =
+        "视频开头有短暂黑屏，建议从主旋律进入前后进行峰值匹配。";
+      showToast("已填充示例内容，请手动选择视频和音频文件");
+    });
+
+    submitBtn.addEventListener("click", async () => {
+      if (isSubmitting) {
+        showToast("任务正在处理中，请稍等");
+        return;
+      }
+
+      const songName = document.getElementById("songName").value.trim();
+      const gameName = document.getElementById("gameName").value.trim();
+      const file = videoFile.files[0];
+      const audio = audioFile.files[0];
+
+      if (!file) {
+        showToast("请先上传视频文件");
+        return;
+      }
+
+      if (!songName && !audio) {
+        showToast("请上传参考音频或填写歌名");
+        return;
+      }
+
+      try {
+        isSubmitting = true;
+        submitBtn.disabled = true;
+        progressBar.style.width = "5%";
+
+        const formData = new FormData();
+        formData.append("videoFile", file);
+        if (audio) {
+          formData.append("audioFile", audio);
+        }
+        formData.append("songName", songName);
+        formData.append("gameName", gameName);
+        formData.append("difficulty", document.getElementById("difficulty").value);
+        formData.append("originalVolume", originalVolume.value);
+        formData.append("alignedVolume", alignedVolume.value);
+        formData.append("remark", document.getElementById("remark").value);
+
+        showToast("正在上传...");
+        const res = await fetch(`${API_BASE_URL}/api/upload`, {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "上传失败");
+        }
+
+        showToast("任务已创建，开始处理");
+        pollTaskStatus(data.task_id);
+      } catch (err) {
+        console.error(err);
+        showToast(err.message || "提交失败");
+        isSubmitting = false;
+        submitBtn.disabled = false;
+        progressBar.style.width = "0%";
+      }
+    });
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    /* =========================
+       后端任务轮询
+    ========================= */
+
+    function pollTaskStatus(taskId) {
+      if (currentTaskTimer) {
+        clearInterval(currentTaskTimer);
+      }
+
+      currentTaskTimer = setInterval(async () => {
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/tasks/${taskId}`);
+          const data = await res.json();
+
+          if (!res.ok) {
+            throw new Error(data.detail || "查询任务失败");
+          }
+
+          let progress = Number(data.progress || 0);
+          if (progress <= 1) progress *= 100;
+          progress = Math.max(0, Math.min(100, progress));
+          progressBar.style.width = progress + "%";
+
+          const detail = data.detail || data.status || data.state || "处理中";
+          showToast(detail);
+
+          if (data.state === "SUCCESS") {
+            clearInterval(currentTaskTimer);
+            currentTaskTimer = null;
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            progressBar.style.width = "100%";
+            showToast("处理完成");
+            handleTaskSuccess(data);
+          }
+
+          if (data.state === "FAILURE") {
+            clearInterval(currentTaskTimer);
+            currentTaskTimer = null;
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            showToast("处理失败：" + (data.detail || "未知错误"));
+          }
+        } catch (err) {
+          clearInterval(currentTaskTimer);
+          currentTaskTimer = null;
+          isSubmitting = false;
+          submitBtn.disabled = false;
+          showToast(err.message || "查询任务失败");
+        }
+      }, 1500);
+    }
+
+    /* =========================
+       结果预览弹窗
+    ========================= */
+    const resultModalMask = document.getElementById("resultModalMask");
+    const resultVideo = document.getElementById("resultVideo");
+    const downloadResultBtn = document.getElementById("downloadResultBtn");
+    const closeResultModal = document.getElementById("closeResultModal");
+    const closeResultModal2 = document.getElementById("closeResultModal2");
+
+    function openResultModal(videoUrl) {
+      resultVideo.src = videoUrl;
+      resultVideo.load();
+      downloadResultBtn.href = videoUrl;
+      resultModalMask.classList.add("show");
+    }
+
+    function hideResultModal() {
+      resultModalMask.classList.remove("show");
+      resultVideo.pause();
+    }
+
+    closeResultModal.addEventListener("click", hideResultModal);
+    closeResultModal2.addEventListener("click", hideResultModal);
+
+    resultModalMask.addEventListener("click", (e) => {
+      if (e.target === resultModalMask) {
+        hideResultModal();
+      }
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && resultModalMask.classList.contains("show")) {
+        hideResultModal();
+      }
+    });
+
+    function handleTaskSuccess(data) {
+      const outputUrl = data.output_url || "";
+      if (!outputUrl) {
+        showToast("任务完成，但未返回结果视频地址");
+        return;
+      }
+      const fullUrl = outputUrl.startsWith("http") ? outputUrl : `${API_BASE_URL}${outputUrl}`;
+      showToast("处理完成，点击预览结果视频");
+      console.log("任务完成，结果视频：", fullUrl);
+      openResultModal(fullUrl);
+    }
+
+    /* =========================
+       海报挂图物理拖拽
+       说明：
+       - 拖动时，直接跟随鼠标，但有范围限制
+       - 松手后，通过弹簧模型回到原点
+       - rotation 会受到 x、y、速度共同影响
+    ========================= */
+
+    const hangingPoster = document.getElementById("hangingPoster");
+    const leftString = document.getElementById("leftString");
+    const rightString = document.getElementById("rightString");
+
+    const posterPhysics = {
+      x: 0,
+      y: 0,
+      vx: 0,
+      vy: 0,
+      targetX: 0,
+      targetY: 0,
+
+      dragging: false,
+      pointerStartX: 0,
+      pointerStartY: 0,
+      dragStartX: 0,
+      dragStartY: 0,
+
+      lastPointerX: 0,
+      lastPointerY: 0,
+      lastTime: performance.now()
+    };
+
+    const POSTER_LIMIT = {
+      minX: -150,
+      maxX: 150,
+      minY: -8,
+      maxY: 72
+    };
+
+    hangingPoster.addEventListener("pointerdown", (e) => {
+      posterPhysics.dragging = true;
+
+      posterPhysics.pointerStartX = e.clientX;
+      posterPhysics.pointerStartY = e.clientY;
+      posterPhysics.dragStartX = posterPhysics.x;
+      posterPhysics.dragStartY = posterPhysics.y;
+
+      posterPhysics.lastPointerX = e.clientX;
+      posterPhysics.lastPointerY = e.clientY;
+      posterPhysics.lastTime = performance.now();
+
+      hangingPoster.classList.add("dragging");
+      hangingPoster.setPointerCapture(e.pointerId);
+
+      e.preventDefault();
+    });
+
+    window.addEventListener("pointermove", (e) => {
+      if (!posterPhysics.dragging) return;
+
+      const now = performance.now();
+      const dt = Math.max(0.016, (now - posterPhysics.lastTime) / 1000);
+
+      const rawX =
+        posterPhysics.dragStartX + (e.clientX - posterPhysics.pointerStartX);
+      const rawY =
+        posterPhysics.dragStartY + (e.clientY - posterPhysics.pointerStartY);
+
+      /*
+        阻尼式限制。
+        超出范围时不是立刻卡死，而是有一点拉不动的橡皮筋感。
+      */
+      const nextX = rubberClamp(rawX, POSTER_LIMIT.minX, POSTER_LIMIT.maxX, 0.28);
+      const nextY = rubberClamp(rawY, POSTER_LIMIT.minY, POSTER_LIMIT.maxY, 0.24);
+
+      posterPhysics.vx = (e.clientX - posterPhysics.lastPointerX) / dt;
+      posterPhysics.vy = (e.clientY - posterPhysics.lastPointerY) / dt;
+
+      posterPhysics.x = nextX;
+      posterPhysics.y = nextY;
+
+      posterPhysics.lastPointerX = e.clientX;
+      posterPhysics.lastPointerY = e.clientY;
+      posterPhysics.lastTime = now;
+    });
+
+    window.addEventListener("pointerup", () => {
+      if (!posterPhysics.dragging) return;
+
+      posterPhysics.dragging = false;
+      hangingPoster.classList.remove("dragging");
+
+      /*
+        松手瞬间保留一部分拖拽速度，这样会有更真实的甩动感。
+        这里做了速度限制，避免海报飞太夸张。
+      */
+      posterPhysics.vx = clamp(posterPhysics.vx * 0.22, -900, 900);
+      posterPhysics.vy = clamp(posterPhysics.vy * 0.18, -650, 650);
+    });
+
+    window.addEventListener("pointercancel", () => {
+      posterPhysics.dragging = false;
+      hangingPoster.classList.remove("dragging");
+    });
+
+    function animatePoster() {
+      requestAnimationFrame(animatePoster);
+
+      if (!posterPhysics.dragging) {
+        /*
+          半隐式欧拉积分弹簧。
+          stiffness 越大回弹越硬。
+          damping 越大衰减越快。
+        */
+        const stiffness = 0.045;
+        const damping = 0.865;
+
+        const forceX = (posterPhysics.targetX - posterPhysics.x) * stiffness;
+        const forceY = (posterPhysics.targetY - posterPhysics.y) * stiffness;
+
+        posterPhysics.vx += forceX;
+        posterPhysics.vy += forceY;
+
+        posterPhysics.vx *= damping;
+        posterPhysics.vy *= damping;
+
+        posterPhysics.x += posterPhysics.vx;
+        posterPhysics.y += posterPhysics.vy;
+
+        if (Math.abs(posterPhysics.x) < 0.01) posterPhysics.x = 0;
+        if (Math.abs(posterPhysics.y) < 0.01) posterPhysics.y = 0;
+      }
+
+      /*
+        旋转计算：
+        - x 越偏，倾斜越明显
+        - 速度越大，甩动越明显
+        - y 越往下，有一点拉伸感
+      */
+      const rotate =
+        posterPhysics.x * 0.045 +
+        posterPhysics.vx * 0.012 -
+        posterPhysics.vy * 0.004;
+
+      const skew =
+        posterPhysics.x * 0.012 +
+        posterPhysics.vx * 0.002;
+
+      const scaleY =
+        1 + clamp(posterPhysics.y / 900, -0.01, 0.055);
+
+      const scaleX =
+        1 - clamp(posterPhysics.y / 1800, -0.005, 0.025);
+
+      hangingPoster.style.transform =
+        `translateX(calc(-50% + ${posterPhysics.x}px))
+         translateY(${posterPhysics.y}px)
+         rotate(${rotate}deg)
+         skewX(${skew}deg)
+         scale(${scaleX}, ${scaleY})`;
+
+      /*
+        挂绳也跟着动一点。
+        让它看起来不是独立飘的，而是被两根线挂住。
+      */
+      const leftStringRotate = clamp(posterPhysics.x * 0.035 + posterPhysics.y * 0.015, -10, 10);
+      const rightStringRotate = clamp(posterPhysics.x * 0.035 - posterPhysics.y * 0.015, -10, 10);
+
+      const stringHeight = 31 + Math.max(0, posterPhysics.y * 0.34);
+
+      leftString.style.height = stringHeight + "px";
+      rightString.style.height = stringHeight + "px";
+
+      leftString.style.transform = `rotate(${leftStringRotate}deg)`;
+      rightString.style.transform = `rotate(${rightStringRotate}deg)`;
+    }
+
+    animatePoster();
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function rubberClamp(value, min, max, rubber) {
+      if (value < min) {
+        return min + (value - min) * rubber;
+      }
+
+      if (value > max) {
+        return max + (value - max) * rubber;
+      }
+
+      return value;
+    }
+  </script>
+</body>
+</html>
