@@ -9,7 +9,7 @@
     · 备用下载渠道  → placeholder-link（两处）
     · 二维码图片    → qr-placeholder（换成 <img src="./xxx.png">）
     · 反馈邮箱      → hello@example.com
-    · 版本 / 包大小 → 搜 v0.3.0 、157 MB
+    · 版本 / 包大小 → 搜 v1.0.0 
 -->
 <html lang="zh-CN">
 <head>
@@ -1316,13 +1316,13 @@
   <!-- ================= HERO ================= -->
   <section class="container hero">
     <div class="hero-copy">
-      <span class="eyebrow"><span class="dot"></span>Android 版 v0.3.0 已发布</span>
+      <span class="eyebrow"><span class="dot"></span>Android 版 v1.0.0 已发布</span>
 
       <h1>手元视频和音乐，<br /><span class="grad">一步对齐。</span></h1>
 
       <p class="hero-sub">
         上传手元视频与参考音频，NEONCUP 会自己找出两者的节拍偏差、对齐混音，
-        再导出成能直接投稿的成片。<b>全程在手机本地完成，不联网、不上传素材。</b>
+        再导出成能直接投稿的成片。<b>全程在手机本地完成，节省你的流量和时间。</b>
       </p>
 
       <div class="hero-actions">
@@ -1342,7 +1342,7 @@
         </span>
         <span class="chip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.6 17.4V6.4l9-1.9v11.2" /><circle cx="6.8" cy="17.7" r="2.6" /><circle cx="15.8" cy="15.7" r="2.6" /></svg>
-          支持 mp4 / mp3 / ncm
+          支持 mp4 / mp3
         </span>
         <span class="chip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.4 2.6 5.6 13.2h5.6l-.6 8.2 7.8-10.6h-5.6l.6-8.2Z" /></svg>
@@ -1358,7 +1358,7 @@
         <div class="screen">
           <div class="s-top">
             <span class="s-dot"></span> NEONCUP
-            <span class="s-ver">v0.3.0</span>
+            <span class="s-ver">v1.0.0</span>
           </div>
 
           <div class="s-video">
@@ -1374,7 +1374,7 @@
           <div class="s-slider"><div style="width:40%"></div></div>
 
           <div class="s-meta">
-            <span>偏移 +0.128s</span>
+            <span>偏移 +101.0000ms</span>
             <span>可信度 高</span>
             <span>手动微调 ✓</span>
           </div>
@@ -1385,7 +1385,7 @@
               <span class="s-h-tag">已导出</span>
             </div>
             <div class="s-h-item">
-              <span>手元_1031.mp4</span>
+              <span>手元_2221.mp4</span>
               <span class="s-h-tag wait">处理中</span>
             </div>
           </div>
@@ -1395,7 +1395,7 @@
       </div>
 
       <div class="float-card fc1">
-        自动对齐 <small>找到 128ms 偏差</small>
+        自动对齐 <small>找到 101.0000ms 偏差</small>
       </div>
       <div class="float-card fc2">
         已导出 ✓ <small>相册 / Movies/NEONCUP</small>
@@ -1403,138 +1403,34 @@
     </div>
   </section>
 
-  <!-- ================= 功能 ================= -->
-  <section class="container section" id="features">
-    <div class="section-head reveal">
-      <span class="eyebrow">功能</span>
-      <h2>以前要开电脑折腾半小时的事，<br />现在手机上几分钟收工</h2>
-      <p>自动对齐打底，人工微调兜底。录完手元不用再导进剪辑软件里慢慢挪音轨。</p>
-    </div>
-
-    <div class="features">
-      <article class="feature reveal" style="--c1:#7158ff; --c2:#35bdf7;">
-        <div class="f-icon" style="--tint-a: rgba(113,88,255,.16); --tint-b: rgba(53,189,247,.16); color:#6b53f5;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="7.2" />
-            <circle cx="12" cy="12" r="2.3" />
-            <path d="M12 2.4v3.2M12 18.4v3.2M2.4 12h3.2M18.4 12h3.2" />
-          </svg>
-        </div>
-        <h3>自动找出偏移</h3>
-        <p>
-          用频谱特征做互相关搜索，把视频里的外放声和原始音轨对上，
-          给出偏移量与可信度。重复段落、弱信号这类刁钻素材也不会直接摆烂。
-        </p>
-        <span class="f-tag">STFT + 互相关</span>
-      </article>
-
-      <article class="feature reveal" style="--c1:#ff7fb4; --c2:#ffc94d; --rd:.06s;">
-        <div class="f-icon" style="--tint-a: rgba(255,127,180,.18); --tint-b: rgba(255,201,77,.18); color:#f2629d;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3.5 7h9.2M17.6 7h2.9M3.5 17h3.1M11.6 17h8.9" />
-            <circle cx="15.2" cy="7" r="2.3" />
-            <circle cx="9.2" cy="17" r="2.3" />
-          </svg>
-        </div>
-        <h3>听出来多少，就填多少</h3>
-        <p>
-          觉得自动结果差了一点，直接填毫秒数：正数音乐延后、负数提前，
-          填完就不再猜，跳过自动对齐。±60 秒以内随便调。
-        </p>
-        <span class="f-tag">手动延迟校准</span>
-      </article>
-
-      <article class="feature reveal" style="--c1:#35d3a3; --c2:#35bdf7; --rd:.12s;">
-        <div class="f-icon" style="--tint-a: rgba(53,211,163,.18); --tint-b: rgba(53,189,247,.18); color:#17b98a;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M4 15.5v-3.2a8 8 0 0 1 16 0v3.2" />
-            <rect x="3" y="14.6" width="4.2" height="6.2" rx="2.1" />
-            <rect x="16.8" y="14.6" width="4.2" height="6.2" rx="2.1" />
-          </svg>
-        </div>
-        <h3>两条音轨，各自调音量</h3>
-        <p>
-          音乐和原视频里的键音分开给滑块。想要纯音乐、想留一点敲击声，
-          或者做「双声道听着更爽」的版本，都自己定。
-        </p>
-        <span class="f-tag">混音比例自由调</span>
-      </article>
-
-      <article class="feature reveal" style="--c1:#7158ff; --c2:#ff7fb4;">
-        <div class="f-icon" style="--tint-a: rgba(113,88,255,.16); --tint-b: rgba(255,127,180,.16); color:#8b5cf6;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="4.6" width="18" height="14.8" rx="3.2" />
-            <path d="M10.4 9.4l4.6 2.6-4.6 2.6z" fill="currentColor" stroke="none" />
-          </svg>
-        </div>
-        <h3>出来就是能投稿的成片</h3>
-        <p>
-          处理和压制都在 App 里跑完，先预览再导出到系统相册，
-          不用再绕一遍电脑，也不用水印。
-        </p>
-        <span class="f-tag">预览 → 相册</span>
-      </article>
-
-      <article class="feature reveal" style="--c1:#ffc94d; --c2:#35d3a3; --rd:.06s;">
-        <div class="f-icon" style="--tint-a: rgba(255,201,77,.2); --tint-b: rgba(53,211,163,.18); color:#e8a413;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9.4 17.6V6.2l9.2-1.9v11.4" />
-            <circle cx="6.6" cy="17.9" r="2.7" />
-            <circle cx="15.8" cy="15.9" r="2.7" />
-          </svg>
-        </div>
-        <h3>.ncm 直接喂进去</h3>
-        <p>
-          从网易云缓存下来的加密文件不用先转一遍，
-          在 App 里选中就能解出 mp3 当参考音轨，省掉一步。
-        </p>
-        <span class="f-tag">内置 ncm 解码</span>
-      </article>
-
-      <article class="feature reveal" style="--c1:#35bdf7; --c2:#7158ff; --rd:.12s;">
-        <div class="f-icon" style="--tint-a: rgba(53,189,247,.18); --tint-b: rgba(113,88,255,.16); color:#2f9fe0;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3.2l7 3v5.9c0 4.3-2.9 7.6-7 8.9-4.1-1.3-7-4.6-7-8.9V6.2l7-3Z" />
-            <path d="M9.4 12.3l1.8 1.8 3.4-3.7" />
-          </svg>
-        </div>
-        <h3>素材不出手机</h3>
-        <p>
-          没有服务器、没有上传队列，选的文件只在本地缓存里流转。
-          处理用的 Python 内核和 ffmpeg 都打包在 APK 内。
-        </p>
-        <span class="f-tag">离线运行 · 无需登录</span>
-      </article>
-    </div>
-  </section>
 
   <!-- ================= 流程 ================= -->
   <section class="container section" id="how">
     <div class="section-head reveal">
       <span class="eyebrow">怎么用</span>
-      <h2>三步，没有第四步</h2>
-      <p>装好之后不用注册、不用配置。第一次打开会花几秒准备运行环境，之后就正常了。</p>
+      <h2>超简单流程</h2>
+      <p>下载完打开就行了。</p>
     </div>
 
     <div class="steps">
       <div class="step reveal">
         <div class="step-num">1</div>
         <h3>选手元视频</h3>
-        <p>相册里挑录好的手元，或者从文件管理里选 mp4。</p>
+        <p>从文件管理里选择 mp4文件。</p>
         <div class="step-body"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.4" y="4.8" width="17.2" height="14.4" rx="3" /><path d="M3.4 9.4h17.2M8.2 4.8v4.6" /></svg><span>视频只在本地读取，不会上传</span></div>
       </div>
 
       <div class="step reveal" style="--rd:.08s;">
         <div class="step-num">2</div>
         <h3>加参考音频</h3>
-        <p>选原曲 mp3，或者直接选 .ncm；也能手动填一个延迟值。</p>
+        <p>选择原曲，支持mp3或ogg格式。</p>
         <div class="step-body"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.6 8h8.6M16.4 8h4M3.6 16h4M11.4 16h9" /><circle cx="14.4" cy="8" r="2.2" /><circle cx="8.6" cy="16" r="2.2" /></svg><span>留空 = 自动对齐，填了 = 按你给的来</span></div>
       </div>
 
       <div class="step reveal" style="--rd:.16s;">
         <div class="step-num">3</div>
-        <h3>等进度条走完</h3>
-        <p>先预览成片，满意就导到相册；不满意改个数值再来一次。</p>
+        <h3>等待处理</h3>
+        <p>预览成片，不满意可以人工干预微调延迟，重新处理。</p>
         <div class="step-body"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="4.6" width="17.6" height="14.8" rx="3" /><path d="M10.4 9.4l4.6 2.6-4.6 2.6z" fill="currentColor" stroke="none" /></svg><span>导出后可直接拖进剪辑软件投稿</span></div>
       </div>
     </div>
@@ -1544,11 +1440,10 @@
   <section class="container section" id="download">
     <div class="download-card reveal">
       <div>
-        <span class="eyebrow"><span class="dot"></span>当前版本 v0.3.0</span>
-        <h2>装到手机上，<br />今晚的手元就能出片</h2>
+        <span class="eyebrow"><span class="dot"></span>当前版本 v1.0.0</span>
+        <h2>点击下载，</h2>
         <p class="desc">
-          APK 直接侧载安装，不需要应用商店账号。首次启动会解包运行环境，
-          比平时慢几秒，属于正常现象。
+          首次启动会解压运行环境，
         </p>
 
         <div class="dl-actions">
@@ -1568,19 +1463,17 @@
             download
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:19px;height:19px;"><path d="M12 3.2v10.6" /><path d="M7.6 9.8 12 14.2l4.4-4.4" /><path d="M4.4 19.2h15.2" /></svg>
-            下载 APK（约 157 MB）
+            下载 APK
           </a>
 
           <a class="btn btn-ghost" href="#faq">安装遇到问题？</a>
         </div>
 
         <div class="spec-list">
-          <div class="spec"><span>版本</span><b>v0.3.0</b></div>
+          <div class="spec"><span>版本</span><b>v1.0.0</b></div>
           <div class="spec"><span>包名</span><b>com.NEONCUP.app</b></div>
           <div class="spec"><span>系统要求</span><b>Android 7.0+</b></div>
           <div class="spec"><span>CPU 架构</span><b>arm64 / x86_64</b></div>
-          <div class="spec"><span>安装包大小</span><b>约 157 MB</b></div>
-          <div class="spec"><span>语言</span><b>简体中文</b></div>
         </div>
       </div>
 
@@ -1610,58 +1503,39 @@
   <section class="container section" id="faq">
     <div class="section-head reveal">
       <span class="eyebrow">常见问题</span>
-      <h2>装之前你可能想知道的</h2>
+      <h2>注意事项</h2>
     </div>
 
     <div class="faq">
       <details class="reveal">
-        <summary>需要联网吗？会不会把我的视频传上去？</summary>
+        <summary>一次能识别几首歌？</summary>
         <p>
-          不需要联网，也不会传。音频对齐、混音、压制全部在手机本地完成，
-          App 里打包了 Python 内核和 ffmpeg，没有上传接口。唯一的网络行为是
-          播放结果视频时用的本机回环地址（127.0.0.1），不经过外部服务器。
+          目前版本仅支持单次手元对齐，即仅能处理单次一首歌，建议视频时长不超过10分钟，手元时间占比越高，自动对齐效果越好。
+        </p>
+      </details>
+
+      <details class="reveal">
+        <summary>为什么会占这么多储存？</summary>
+        <p>
+          处理一次之后就会残留一次视频文件，请您及时从右上角历史处理记录中删除无用残留文件
         </p>
       </details>
 
       <details class="reveal">
         <summary>安装时提示「不允许安装未知来源应用」怎么办？</summary>
         <p>
-          侧载 APK 都会遇到这个。点提示里的「设置」，允许你当前用的浏览器或文件管理器
-          安装应用，再返回继续装就行。装完可以把这个权限关掉。
-        </p>
-      </details>
-
-      <details class="reveal">
-        <summary>为什么安装包这么大？</summary>
-        <p>
-          里面塞了 CPython 运行环境、numpy / scipy 这些科学计算库，以及完整版 ffmpeg。
-          这些就是「不用连电脑」的代价，换来的是完全离线、随开随用。
-        </p>
-      </details>
-
-      <details class="reveal">
-        <summary>处理很慢、手机发烫正常吗？</summary>
-        <p>
-          正常。音频对齐是纯 CPU 计算，长视频会明显吃性能。建议插着电、
-          别锁屏处理，处理期间切到后台太久可能被系统回收。
+          正常现象，授权单次安装权限即可
         </p>
       </details>
 
       <details class="reveal">
         <summary>有 iOS 版吗？</summary>
         <p>
-          暂时没有。目前只有 Android 版本，而且只支持 arm64 的真机
-          （很老的 32 位机型装不上）。
+          暂时没有>……<。目前只有 Android 版本，我们会尽快的
         </p>
       </details>
 
-      <details class="reveal">
-        <summary>做完的视频存在哪？</summary>
-        <p>
-          点「导出」之后会写进系统相册，一般在 Movies / NEONCUP 目录里。
-          App 内部缓存不对外可见，所以想留着一定要导出。
-        </p>
-      </details>
+      
     </div>
   </section>
 
@@ -1761,12 +1635,12 @@
           <a href="#how">使用流程</a>
           <a href="#download">下载</a>
           <a href="#faq">常见问题</a>
-          <a href="mailto:hello@example.com">反馈</a>
+          <a href="mailto:https://space.bilibili.com/333454038?spm_id_from=333.1007.0.0">反馈</a>
         </div>
       </div>
 
       <div class="foot-bottom">
-        <span>Android v0.3.0 · 个人兴趣项目，免费使用，与任何游戏或音乐平台无关联。</span>
+        <span>Android v1.0.0 · 个人兴趣项目，免费使用，与任何游戏或音乐平台无关联。</span>
         <span>© 2026 NEONCUP</span>
       </div>
     </div>
